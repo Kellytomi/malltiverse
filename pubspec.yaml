@@ -67,6 +67,8 @@ flutter:
     - assets/images/belt.png
     - assets/images/watch.png
     - assets/images/earbuds.png
+    - assets/images/shoe.png
+    - assets/images/shirt.png
 
   fonts:
     - family: Montserrat
