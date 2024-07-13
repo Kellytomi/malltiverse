@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart' as home;
 import 'cart_page.dart' as cart;
+import 'checkout_page.dart' as checkout;
+import 'payment_page.dart' as payment;
 
 void main() {
   runApp(const MyApp());
@@ -34,7 +36,7 @@ class _MainPageState extends State<MainPage> {
   final List<Widget> _pages = [
     const home.HomePage(),
     const cart.CartPage(),
-    const Center(child: Text('Checkout Page', style: TextStyle(fontFamily: 'Montserrat', fontSize: 24))),
+    const checkout.CheckoutPage(),
   ];
 
   void _onItemTapped(int index) {

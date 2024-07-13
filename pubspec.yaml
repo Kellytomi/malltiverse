@@ -69,6 +69,9 @@ flutter:
     - assets/images/earbuds.png
     - assets/images/shoe.png
     - assets/images/shirt.png
+    - assets/images/card.png
+    - assets/images/confetti.gif
+    - assets/images/check.gif
 
   fonts:
     - family: Montserrat
