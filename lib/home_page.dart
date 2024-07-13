@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -14,21 +13,20 @@ class HomePage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Featured Product Carousel
+          // Static Featured Product
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12.0),
-              child: CarouselSlider(
-                options: CarouselOptions(
-                  autoPlay: true,
-                  aspectRatio: 2.0,
-                  enlargeCenterPage: true,
+              child: Container(
+                height: 232,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(imgList[0]),
+                    fit: BoxFit.cover,
+                  ),
                 ),
-                items: imgList
-                    .map((item) => Center(
-                        child: Image.asset(item, fit: BoxFit.cover)))
-                    .toList(),
               ),
             ),
           ),
@@ -56,17 +54,19 @@ class HomePage extends StatelessWidget {
                   imagePath: 'assets/images/iphone.png',
                 ),
                 Product(
-                    name: 'Touch Screen Smart Watch',
-                    description: 'For Andriod & IOS',
-                    price: 'N 9,170',
-                    rating: 5,
-                    imagePath: 'assets/images/watch.png'),
+                  name: 'Touch Screen Smart Watch',
+                  description: 'For Andriod & IOS',
+                  price: 'N 9,170',
+                  rating: 5,
+                  imagePath: 'assets/images/watch.png',
+                ),
                 Product(
-                    name: 'Itel Bluetooth Earphones',
-                    description: 'BUDS ACE Wireless Earpods',
-                    price: 'N 17,660',
-                    rating: 4,
-                    imagePath: 'assets/images/earbuds.png')
+                  name: 'Itel Bluetooth Earphones',
+                  description: 'BUDS ACE Wireless Earpods',
+                  price: 'N 17,660',
+                  rating: 4,
+                  imagePath: 'assets/images/earbuds.png',
+                ),
               ],
             ),
           ),
@@ -164,7 +164,7 @@ class ProductSection extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                   padding: const EdgeInsets.all(8.0),
-                  child: Image.asset(product.imagePath, width: 200, height: 180),
+                  child: Image.asset(product.imagePath, width: 185, height: 184),
                 ),
                 const SizedBox(height: 8),
                 Text(product.name, style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w600)),
