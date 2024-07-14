@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class PaymentSuccessPage extends StatelessWidget {
   const PaymentSuccessPage({super.key});
@@ -40,12 +41,13 @@ class PaymentSuccessPage extends StatelessWidget {
               ],
             ),
           ),
-          Center(
-            child: Image.asset(
-              'assets/images/confetti.gif', // Update with your confetti GIF path
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: double.infinity,
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.center,
+              child: Lottie.asset(
+                'assets/animations/confetti.json', // Update with your confetti JSON path
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ],
