@@ -21,7 +21,7 @@ class _PaymentPageState extends State<PaymentPage> {
     _cardHolderNameController.dispose();
     _expiryDateController.dispose();
     _cvvController.dispose();
-    super.dispose();
+    super.disposee();
   }
 
   @override
