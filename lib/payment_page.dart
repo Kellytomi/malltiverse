@@ -285,7 +285,15 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   String _formatCardNumber(String input) {
-    return input.replaceAllMapped(RegExp(r'.{1,4}'), (match) => '${match.group(0)} ');
+    input = input.replaceAll(' ', '');
+    String formatted = '';
+    for (int i = 0; i < input.length; i++) {
+      if (i % 4 == 0 && i != 0) {
+        formatted += ' ';
+      }
+      formatted += input[i];
+    }
+    return formatted;
   }
 
   Widget _buildFloatingNavBar() {
