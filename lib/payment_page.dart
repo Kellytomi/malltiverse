@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'custom_nav_bar.dart'; // Import the custom navigation bar
+import 'package:malltiverse/main.dart';
+import 'custom_nav_bar.dart';
 
 class CardNumberInputFormatter extends TextInputFormatter {
   @override
@@ -43,12 +44,24 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   void _onItemTapped(int index) {
-    Navigator.pushReplacementNamed(context, index == 0 ? '/home' : (index == 1 ? '/cart' : '/checkout'));
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => MainPage(selectedIndex: index),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white, // Set the background color of the Scaffold to white
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -78,9 +91,12 @@ class _PaymentPageState extends State<PaymentPage> {
             Center(
               child: Stack(
                 children: [
-                  Image.asset(
-                    'assets/images/card.png', // Update with your image path
-                    fit: BoxFit.cover,
+                  Container(
+                    color: Colors.white, // Set the background color of the container to white
+                    child: Image.asset(
+                      'assets/images/card.png',
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   Positioned(
                     top: 100,

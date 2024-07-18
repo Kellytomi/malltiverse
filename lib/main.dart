@@ -82,7 +82,9 @@ class _MainPageState extends State<MainPage> {
           ),
         ),
         title: Text(
-          _selectedIndex == 0 ? 'Product List' : (_selectedIndex == 1 ? 'My Cart' : 'Checkout'),
+          _selectedIndex == 0
+              ? 'Product List'
+              : (_selectedIndex == 1 ? 'My Cart' : 'Checkout'),
           style: const TextStyle(
             color: Colors.black,
             fontSize: 20,

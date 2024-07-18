@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'custom_nav_bar.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
-
-  void _onItemTapped(BuildContext context, int index) {
-    Navigator.pushReplacementNamed(context, index == 0 ? '/home' : (index == 1 ? '/cart' : '/checkout'));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +10,7 @@ class HomePage extends StatelessWidget {
     ];
 
     return Scaffold(
+      backgroundColor: Colors.white, // Set the background color of the Scaffold to white
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

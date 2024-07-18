@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'payment_page.dart';
-import 'your_navigation_helper.dart'; // Import your custom navigation function
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage({super.key});
@@ -115,7 +114,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
               height: 44,
               child: ElevatedButton(
                 onPressed: () {
-                  navigateToPayment(context); // Use custom transition function
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) => const PaymentPage(),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFF7F7D),
