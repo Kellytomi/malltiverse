@@ -1,142 +1,145 @@
 import 'package:flutter/material.dart';
+import 'custom_nav_bar.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  void _onItemTapped(BuildContext context, int index) {
+    Navigator.pushReplacementNamed(context, index == 0 ? '/home' : (index == 1 ? '/cart' : '/checkout'));
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<String> imgList = [
-      'assets/images/featured_product.png', // Make sure to add your images in the assets folder
+      'assets/images/featured_product.png',
     ];
 
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Static Featured Product
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12.0),
-              child: Container(
-                height: 232,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(imgList[0]),
-                    fit: BoxFit.cover,
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12.0),
+                child: Container(
+                  height: 232,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(imgList[0]),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          // Tech Gadgets Section
-          const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text('Tech Gadgets', style: TextStyle(fontSize: 20, fontFamily: 'Montserrat', fontWeight: FontWeight.w600)),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: ProductSection(
-              products: [
-                Product(
-                  name: 'Joystick Game Controller',
-                  description: 'Wired UCOM USB Pad...',
-                  price: 'N 11,250',
-                  rating: 5,
-                  imagePath: 'assets/images/joystick.png',
-                ),
-                Product(
-                  name: 'Apple iPhone 14 Pro',
-                  description: '6GB RAM + 128GB ROM',
-                  price: 'N 1,450,000',
-                  rating: 5,
-                  imagePath: 'assets/images/iphone.png',
-                ),
-                Product(
-                  name: 'Touch Screen Smart Watch',
-                  description: 'For Andriod & IOS',
-                  price: 'N 9,170',
-                  rating: 5,
-                  imagePath: 'assets/images/watch.png',
-                ),
-                Product(
-                  name: 'Itel Bluetooth Earphones',
-                  description: 'BUDS ACE Wireless Earpods',
-                  price: 'N 17,660',
-                  rating: 4,
-                  imagePath: 'assets/images/earbuds.png',
-                ),
-              ],
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text('Tech Gadgets', style: TextStyle(fontSize: 20, fontFamily: 'Montserrat', fontWeight: FontWeight.w600)),
             ),
-          ),
-          // Men's Fashion Section
-          const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text('Men\'s Fashion', style: TextStyle(fontSize: 20, fontFamily: 'Montserrat', fontWeight: FontWeight.w600)),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: ProductSection(
-              products: [
-                Product(
-                  name: 'Men\'s Belt Leather',
-                  description: 'Buckle Brown Timeless Belt',
-                  price: 'N 17,500',
-                  rating: 4,
-                  imagePath: 'assets/images/belt.png',
-                ),
-                Product(
-                  name: 'Quality Plain Face Cap',
-                  description: 'Plain Black Face Cap',
-                  price: 'N 4,000',
-                  rating: 5,
-                  imagePath: 'assets/images/cap.png',
-                ),
-                 Product(
-                  name: 'Men’s Formal Lace Up Shoes',
-                  description: 'Italian Brogues Leather Shoe',
-                  price: 'N 21,000',
-                  rating: 4,
-                  imagePath: 'assets/images/shoe.png',
-                ),
-                Product(
-                  name: 'Men’s Short Sleeve ',
-                  description: 'Casual Shirt - Black & Brown',
-                  price: 'N 25,900',
-                  rating: 5,
-                  imagePath: 'assets/images/shirt.png',
-                ),
-              ],
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              child: ProductSection(
+                products: [
+                  Product(
+                    name: 'Joystick Game Controller',
+                    description: 'Wired UCOM USB Pad...',
+                    price: 'N 11,250',
+                    rating: 5,
+                    imagePath: 'assets/images/joystick.png',
+                  ),
+                  Product(
+                    name: 'Apple iPhone 14 Pro',
+                    description: '6GB RAM + 128GB ROM',
+                    price: 'N 1,450,000',
+                    rating: 5,
+                    imagePath: 'assets/images/iphone.png',
+                  ),
+                  Product(
+                    name: 'Touch Screen Smart Watch',
+                    description: 'For Andriod & IOS',
+                    price: 'N 9,170',
+                    rating: 5,
+                    imagePath: 'assets/images/watch.png',
+                  ),
+                  Product(
+                    name: 'Itel Bluetooth Earphones',
+                    description: 'BUDS ACE Wireless Earpods',
+                    price: 'N 17,660',
+                    rating: 4,
+                    imagePath: 'assets/images/earbuds.png',
+                  ),
+                ],
+              ),
             ),
-          ),
-          // Women's Fashion Section
-          const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text('Women\'s Fashion', style: TextStyle(fontSize: 20, fontFamily: 'Montserrat', fontWeight: FontWeight.w600)),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: ProductSection(
-              products: [
-                Product(
-                  name: 'Ladies Leather Chic Bag',
-                  description: 'Office Trendy Handbag...',
-                  price: 'N 20,950',
-                  rating: 4,
-                  imagePath: 'assets/images/bag.png',
-                ),
-                Product(
-                  name: 'Summer Tie Neck Long Dress',
-                  description: 'Purple Free Floral Dress',
-                  price: 'N 10,000',
-                  rating: 5,
-                  imagePath: 'assets/images/dress.png',
-                ),
-              ],
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text('Men\'s Fashion', style: TextStyle(fontSize: 20, fontFamily: 'Montserrat', fontWeight: FontWeight.w600)),
             ),
-          ),
-        ],
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              child: ProductSection(
+                products: [
+                  Product(
+                    name: 'Men\'s Belt Leather',
+                    description: 'Buckle Brown Timeless Belt',
+                    price: 'N 17,500',
+                    rating: 4,
+                    imagePath: 'assets/images/belt.png',
+                  ),
+                  Product(
+                    name: 'Quality Plain Face Cap',
+                    description: 'Plain Black Face Cap',
+                    price: 'N 4,000',
+                    rating: 5,
+                    imagePath: 'assets/images/cap.png',
+                  ),
+                  Product(
+                    name: 'Men’s Formal Lace Up Shoes',
+                    description: 'Italian Brogues Leather Shoe',
+                    price: 'N 21,000',
+                    rating: 4,
+                    imagePath: 'assets/images/shoe.png',
+                  ),
+                  Product(
+                    name: 'Men’s Short Sleeve ',
+                    description: 'Casual Shirt - Black & Brown',
+                    price: 'N 25,900',
+                    rating: 5,
+                    imagePath: 'assets/images/shirt.png',
+                  ),
+                ],
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text('Women\'s Fashion', style: TextStyle(fontSize: 20, fontFamily: 'Montserrat', fontWeight: FontWeight.w600)),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              child: ProductSection(
+                products: [
+                  Product(
+                    name: 'Ladies Leather Chic Bag',
+                    description: 'Office Trendy Handbag...',
+                    price: 'N 20,950',
+                    rating: 4,
+                    imagePath: 'assets/images/bag.png',
+                  ),
+                  Product(
+                    name: 'Summer Tie Neck Long Dress',
+                    description: 'Purple Free Floral Dress',
+                    price: 'N 10,000',
+                    rating: 5,
+                    imagePath: 'assets/images/dress.png',
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

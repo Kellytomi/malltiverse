@@ -1,6 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'payment_success_page.dart';
+import 'custom_nav_bar.dart'; // Import the custom navigation bar
+
+class CardNumberInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    String newText = newValue.text.replaceAll(' ', '');
+    String formattedText = '';
+    for (int i = 0; i < newText.length; i++) {
+      if (i % 4 == 0 && i != 0) {
+        formattedText += ' ';
+      }
+      formattedText += newText[i];
+    }
+    return newValue.copyWith(
+      text: formattedText,
+      selection: TextSelection.collapsed(offset: formattedText.length),
+    );
+  }
+}
 
 class PaymentPage extends StatefulWidget {
   const PaymentPage({super.key});
@@ -24,13 +42,17 @@ class _PaymentPageState extends State<PaymentPage> {
     super.dispose();
   }
 
+  void _onItemTapped(int index) {
+    Navigator.pushReplacementNamed(context, index == 0 ? '/home' : (index == 1 ? '/cart' : '/checkout'));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
@@ -253,12 +275,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 height: 44,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const PaymentSuccessPage(),
-                      ),
-                    );
+                    Navigator.pushNamed(context, '/payment_success');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFF7F7D),
@@ -280,7 +297,10 @@ class _PaymentPageState extends State<PaymentPage> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildFloatingNavBar(),
+      bottomNavigationBar: CustomNavBar(
+        selectedIndex: 2,
+        onItemTapped: _onItemTapped,
+      ),
     );
   }
 
@@ -294,66 +314,5 @@ class _PaymentPageState extends State<PaymentPage> {
       formatted += input[i];
     }
     return formatted;
-  }
-
-  Widget _buildFloatingNavBar() {
-    return Container(
-      height: 70,
-      margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      decoration: BoxDecoration(
-        color: const Color(0xFF2A2A2A),
-        borderRadius: BorderRadius.circular(35),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 5,
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavBarItem(0, 'assets/icons/home.png'),
-          _buildNavBarItem(1, 'assets/icons/cart1.png'),
-          _buildNavBarItem(2, 'assets/icons/checkout1.png'),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavBarItem(int index, String assetPath) {
-    return GestureDetector(
-      onTap: () {
-        // Handle navigation based on index
-      },
-      child: CircleAvatar(
-        backgroundColor: index == 2 ? const Color(0xFFFF7F7D) : Colors.transparent,
-        child: Image.asset(
-          assetPath,
-          color: index == 2 ? Colors.black : Colors.white,
-        ),
-      ),
-    );
-  }
-}
-
-class CardNumberInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    String newText = newValue.text.replaceAll(' ', '');
-    String formattedText = '';
-    for (int i = 0; i < newText.length; i++) {
-      if (i % 4 == 0 && i != 0) {
-        formattedText += ' ';
-      }
-      formattedText += newText[i];
-    }
-    return newValue.copyWith(
-      text: formattedText,
-      selection: TextSelection.collapsed(offset: formattedText.length),
-    );
   }
 }

@@ -1,12 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'dart:async';
 
 class PaymentSuccessPage extends StatelessWidget {
   const PaymentSuccessPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Navigate back to home after 3 seconds
+    Timer(Duration(seconds: 3), () {
+      Navigator.pushReplacementNamed(context, '/home');
+    });
+
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
+        title: const Text(
+          'Payment Success',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontFamily: 'Montserrat',
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        centerTitle: true,
+      ),
       backgroundColor: Colors.white,
       body: Stack(
         children: [
@@ -14,10 +35,16 @@ class PaymentSuccessPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/images/check.gif', // Update with your checkmark image path
+                SizedBox(
                   width: 100,
                   height: 100,
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: Lottie.asset(
+                      'assets/animations/tick.json',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 const Text(
@@ -45,56 +72,12 @@ class PaymentSuccessPage extends StatelessWidget {
             child: Align(
               alignment: Alignment.center,
               child: Lottie.asset(
-                'assets/animations/confetti.json', // Update with your confetti JSON path
+                'assets/animations/confetti.json',
                 fit: BoxFit.cover,
               ),
             ),
           ),
         ],
-      ),
-      bottomNavigationBar: _buildFloatingNavBar(),
-    );
-  }
-
-  Widget _buildFloatingNavBar() {
-    return Container(
-      height: 70,
-      margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      decoration: BoxDecoration(
-        color: const Color(0xFF2A2A2A),
-        borderRadius: BorderRadius.circular(35),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 5,
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavBarItem(0, 'assets/icons/home.png'),
-          _buildNavBarItem(1, 'assets/icons/cart1.png'),
-          _buildNavBarItem(2, 'assets/icons/checkout1.png'),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavBarItem(int index, String assetPath) {
-    return GestureDetector(
-      onTap: () {
-        // Handle navigation based on index
-      },
-      child: CircleAvatar(
-        backgroundColor: index == 2 ? const Color(0xFFFF7F7D) : Colors.transparent,
-        child: Image.asset(
-          assetPath,
-          color: index == 2 ? Colors.black : Colors.white,
-        ),
       ),
     );
   }

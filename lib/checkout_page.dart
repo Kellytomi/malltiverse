@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'payment_page.dart';
+import 'your_navigation_helper.dart'; // Import your custom navigation function
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage({super.key});
@@ -94,7 +95,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               ),
             ),
           ),
-          const SizedBox(height: 16), // More space between contact fields
+          const SizedBox(height: 16),
           SizedBox(
             width: 248,
             height: 38.83,
@@ -107,17 +108,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
               ),
             ),
           ),
-          const SizedBox(height: 55), // More space before the button
+          const SizedBox(height: 55),
           Center(
             child: SizedBox(
-              width: 307, // Set the desired width for the button
+              width: 307,
               height: 44,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const PaymentPage()),
-                  );
+                  navigateToPayment(context); // Use custom transition function
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFF7F7D),

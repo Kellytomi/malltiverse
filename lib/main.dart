@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'home_page.dart' as home;
-import 'cart_page.dart' as cart;
-import 'checkout_page.dart' as checkout;
-import 'payment_page.dart' as payment;
+import 'home_page.dart';
+import 'cart_page.dart';
+import 'checkout_page.dart';
+import 'payment_page.dart';
+import 'payment_success_page.dart';
+import 'custom_nav_bar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,31 +20,49 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Montserrat',
       ),
-      home: const MainPage(),
+      initialRoute: '/home',
+      routes: {
+        '/home': (context) => const MainPage(selectedIndex: 0),
+        '/cart': (context) => const MainPage(selectedIndex: 1),
+        '/checkout': (context) => const MainPage(selectedIndex: 2),
+        '/payment': (context) => const PaymentPage(),
+        '/payment_success': (context) => const PaymentSuccessPage(),
+      },
     );
   }
 }
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  final int selectedIndex;
+
+  const MainPage({Key? key, required this.selectedIndex}) : super(key: key);
 
   @override
   _MainPageState createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
+  late PageController _pageController;
 
   final List<Widget> _pages = [
-    const home.HomePage(),
-    const cart.CartPage(),
-    const checkout.CheckoutPage(),
+    const HomePage(),
+    const CartPage(),
+    const CheckoutPage(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.selectedIndex;
+    _pageController = PageController(initialPage: _selectedIndex);
+  }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+    _pageController.jumpToPage(index);
   }
 
   @override
@@ -57,9 +77,9 @@ class _MainPageState extends State<MainPage> {
           padding: const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
           child: Image.asset(
             'assets/icons/Malltiverse.png',
-            width: 40, // Adjust the width as needed
-            height: 40, // Adjust the height as needed
-          ), // Add your logo here
+            width: 40,
+            height: 40,
+          ),
         ),
         title: Text(
           _selectedIndex == 0 ? 'Product List' : (_selectedIndex == 1 ? 'My Cart' : 'Checkout'),
@@ -71,50 +91,21 @@ class _MainPageState extends State<MainPage> {
           ),
         ),
         centerTitle: true,
-        leadingWidth: 60, // Adjust the leading width to control spacing
+        leadingWidth: 60,
       ),
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: _buildFloatingNavBar(),
-    );
-  }
-
-  Widget _buildFloatingNavBar() {
-    return Container(
-      height: 70,
-      margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      decoration: BoxDecoration(
-        color: const Color(0xFF2A2A2A),
-        borderRadius: BorderRadius.circular(35),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 5,
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        physics: const NeverScrollableScrollPhysics(),
+        children: _pages,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavBarItem(0, 'assets/icons/home.png'),
-          _buildNavBarItem(1, 'assets/icons/cart1.png'),
-          _buildNavBarItem(2, 'assets/icons/checkout1.png'),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavBarItem(int index, String assetPath) {
-    return GestureDetector(
-      onTap: () => _onItemTapped(index),
-      child: CircleAvatar(
-        backgroundColor: _selectedIndex == index ? const Color(0xFFFF7F7D) : Colors.transparent,
-        child: Image.asset(
-          assetPath,
-          color: _selectedIndex == index ? Colors.black : Colors.white,
-        ),
+      bottomNavigationBar: CustomNavBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
     );
   }
