@@ -74,11 +74,11 @@ class _MainPageState extends State<MainPage> {
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
         leading: Padding(
-          padding: const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
+          padding: const EdgeInsets.only(left: 4.0, top: 8.0, bottom: 8.0),
           child: Image.asset(
             'assets/icons/Malltiverse.png',
-            width: 40,
-            height: 40,
+            width: 99,  // Updated width
+            height: 31, // Updated height
           ),
         ),
         title: Text(
@@ -93,7 +93,7 @@ class _MainPageState extends State<MainPage> {
           ),
         ),
         centerTitle: true,
-        leadingWidth: 60,
+        leadingWidth: 125,  // Adjusted leading width to accommodate the new size
       ),
       body: PageView(
         controller: _pageController,
