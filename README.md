@@ -11,8 +11,9 @@ Malltiverse is a Flutter-based e-commerce application that allows users to brows
 
 ## Screenshots
 
-![Home Page](assets/images/home_screenshot.png)
-![Cart Page](assets/images/cart_screenshot.png)
+![Home Page](assets/images/home.png)
+![Cart Page](assets/images/cart.png)
+![Success Page](assets/images/success.png)
 
 ## Installation
 
