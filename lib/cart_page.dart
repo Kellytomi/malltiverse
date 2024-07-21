@@ -1,48 +1,28 @@
 // cart_page.dart
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'product.dart';
+import 'cart_provider.dart';
 import 'package:intl/intl.dart';
 
 class CartPage extends StatefulWidget {
-  static final Map<Product, int> _cartItems = {};
-
   const CartPage({super.key});
-
-  static void addItemToCart(Product product) {
-    if (_cartItems.containsKey(product)) {
-      _cartItems[product] = _cartItems[product]! + 1;
-    } else {
-      _cartItems[product] = 1;
-    }
-  }
-
-  static Map<Product, int> get cartItems => _cartItems;
 
   @override
   _CartPageState createState() => _CartPageState();
 }
 
 class _CartPageState extends State<CartPage> {
-  void _incrementQuantity(Product product) {
-    setState(() {
-      CartPage._cartItems[product] = CartPage._cartItems[product]! + 1;
-    });
+  void _incrementQuantity(CartProvider cartProvider, Product product) {
+    cartProvider.incrementQuantity(product);
   }
 
-  void _decrementQuantity(Product product) {
-    setState(() {
-      if (CartPage._cartItems[product] == 1) {
-        CartPage._cartItems.remove(product);
-      } else {
-        CartPage._cartItems[product] = CartPage._cartItems[product]! - 1;
-      }
-    });
+  void _decrementQuantity(CartProvider cartProvider, Product product) {
+    cartProvider.decrementQuantity(product);
   }
 
-  void _removeItem(Product product) {
-    setState(() {
-      CartPage._cartItems.remove(product);
-    });
+  void _removeItem(CartProvider cartProvider, Product product) {
+    cartProvider.removeItemFromCart(product);
   }
 
   String _formatCurrency(int amount) {
@@ -52,7 +32,9 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
-    final totalAmount = CartPage._cartItems.entries.fold(0, (sum, entry) {
+    final cartProvider = Provider.of<CartProvider>(context);
+
+    final totalAmount = cartProvider.cartItems.entries.fold(0, (sum, entry) {
       return sum + int.parse(entry.key.price.replaceAll(RegExp(r'[^0-9]'), '')) * entry.value;
     });
 
@@ -61,7 +43,7 @@ class _CartPageState extends State<CartPage> {
       body: Column(
         children: [
           Expanded(
-            child: CartPage._cartItems.isEmpty
+            child: cartProvider.cartItems.isEmpty
                 ? const Center(
                     child: Text(
                       'No Item in Cart',
@@ -73,19 +55,24 @@ class _CartPageState extends State<CartPage> {
                     ),
                   )
                 : ListView.builder(
-                    itemCount: CartPage._cartItems.length,
+                    itemCount: cartProvider.cartItems.length,
                     itemBuilder: (context, index) {
-                      final product = CartPage._cartItems.keys.elementAt(index);
-                      final quantity = CartPage._cartItems[product]!;
+                      final product = cartProvider.cartItems.keys.elementAt(index);
+                      final quantity = cartProvider.cartItems[product]!;
                       final int productTotal = int.parse(product.price.replaceAll(RegExp(r'[^0-9]'), '')) * quantity;
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                        child: Card(
-                          elevation: 3,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                        child: Container(
+                          width: 380,
+                          height: 138,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                              color: const Color(0xFF2A2A2A).withOpacity(0.1),
+                              width: 1,
+                            ),
                           ),
-                          color: Colors.white,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
@@ -102,7 +89,7 @@ class _CartPageState extends State<CartPage> {
                                           Text(product.name, style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w600, fontSize: 12)),
                                           IconButton(
                                             icon: const Icon(Icons.delete),
-                                            onPressed: () => _removeItem(product),
+                                            onPressed: () => _removeItem(cartProvider, product),
                                           ),
                                         ],
                                       ),
@@ -115,12 +102,12 @@ class _CartPageState extends State<CartPage> {
                                             children: [
                                               IconButton(
                                                 icon: const Icon(Icons.remove),
-                                                onPressed: () => _decrementQuantity(product),
+                                                onPressed: () => _decrementQuantity(cartProvider, product),
                                               ),
                                               Text('$quantity', style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w400)),
                                               IconButton(
                                                 icon: const Icon(Icons.add),
-                                                onPressed: () => _incrementQuantity(product),
+                                                onPressed: () => _incrementQuantity(cartProvider, product),
                                               ),
                                             ],
                                           ),
@@ -138,63 +125,74 @@ class _CartPageState extends State<CartPage> {
                     },
                   ),
           ),
-          Container(
-            color: Colors.grey[200],
-            padding: const EdgeInsets.all(16.0),
-            width: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Text('Shopping Summary', style: TextStyle(fontSize: 16, fontFamily: 'Montserrat', fontWeight: FontWeight.w600)),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Sub-Total', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
-                    Text(_formatCurrency(totalAmount), style: const TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Delivery Fee', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
-                    Text('₦1,500', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Discount Amount', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
-                    Text('₦3,500', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                const Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Total Amount', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat', fontWeight: FontWeight.bold)),
-                    Text(_formatCurrency(totalAmount + 1500 - 3500), style: const TextStyle(fontSize: 12, fontFamily: 'Montserrat', fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.black,
-                    backgroundColor: const Color(0xFFF44336),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    minimumSize: const Size(306, 44), // Added size
+          if (!cartProvider.cartItems.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Container(
+                width: 380,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEDEDED).withOpacity(0.67),
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(
+                    color: const Color(0xFF2A2A2A).withOpacity(0.1),
+                    width: 1,
                   ),
-                  child: const Text('Checkout', style: TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w600)),
                 ),
-              ],
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Text('Shopping Summary', style: TextStyle(fontSize: 16, fontFamily: 'Montserrat', fontWeight: FontWeight.w600)),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Sub-Total', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
+                        Text(_formatCurrency(totalAmount), style: const TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Delivery Fee', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
+                        Text('₦1,500', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Discount Amount', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
+                        Text('₦3,500', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    const Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Total Amount', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat', fontWeight: FontWeight.bold)),
+                        Text(_formatCurrency(totalAmount + 1500 - 3500), style: const TextStyle(fontSize: 12, fontFamily: 'Montserrat', fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.black,
+                        backgroundColor: const Color(0xFFF44336),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        minimumSize: const Size(306, 44), // Added size
+                      ),
+                      child: const Text('Checkout', style: TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w600)),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
         ],
       ),
     );

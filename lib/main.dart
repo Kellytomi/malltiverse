@@ -1,14 +1,21 @@
 // main.dart
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'home_page.dart';
 import 'cart_page.dart';
 import 'checkout_page.dart';
 import 'payment_page.dart';
 import 'payment_success_page.dart';
 import 'custom_nav_bar.dart';
+import 'cart_provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => CartProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -68,7 +75,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    int cartItemCount = CartPage.cartItems.values.fold(0, (sum, item) => sum + item);
+    int cartItemCount = Provider.of<CartProvider>(context).totalItems;
 
     return Scaffold(
       backgroundColor: Colors.white,

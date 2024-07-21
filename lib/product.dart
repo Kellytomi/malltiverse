@@ -13,4 +13,25 @@ class Product {
     required this.rating,
     required this.imagePath,
   });
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Product &&
+        other.name == name &&
+        other.description == description &&
+        other.price == price &&
+        other.rating == rating &&
+        other.imagePath == imagePath;
+  }
+
+  @override
+  int get hashCode {
+    return name.hashCode ^
+        description.hashCode ^
+        price.hashCode ^
+        rating.hashCode ^
+        imagePath.hashCode;
+  }
 }

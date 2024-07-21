@@ -1,6 +1,8 @@
+// home_page.dart
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'product.dart';
-import 'cart_page.dart';
+import 'cart_provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -44,28 +46,28 @@ class HomePage extends StatelessWidget {
                   Product(
                     name: 'Joystick Game Controller',
                     description: 'Wired UCOM USB Pad...',
-                    price: 'N 11,250',
+                    price: '₦11,250',
                     rating: 5,
                     imagePath: 'assets/images/joystick.png',
                   ),
                   Product(
                     name: 'Apple iPhone 14 Pro',
                     description: '6GB RAM + 128GB ROM',
-                    price: 'N 1,450,000',
+                    price: '₦1,450,000',
                     rating: 5,
                     imagePath: 'assets/images/iphone.png',
                   ),
                   Product(
                     name: 'Touch Screen Smart Watch',
-                    description: 'For Andriod & IOS',
-                    price: 'N 9,170',
+                    description: 'For Android & IOS',
+                    price: '₦9,170',
                     rating: 5,
                     imagePath: 'assets/images/watch.png',
                   ),
                   Product(
                     name: 'Itel Bluetooth Earphones',
                     description: 'BUDS ACE Wireless Earpods',
-                    price: 'N 17,660',
+                    price: '₦17,660',
                     rating: 4,
                     imagePath: 'assets/images/earbuds.png',
                   ),
@@ -83,28 +85,28 @@ class HomePage extends StatelessWidget {
                   Product(
                     name: 'Men\'s Belt Leather',
                     description: 'Buckle Brown Timeless Belt',
-                    price: 'N 17,500',
+                    price: '₦17,500',
                     rating: 4,
                     imagePath: 'assets/images/belt.png',
                   ),
                   Product(
                     name: 'Quality Plain Face Cap',
                     description: 'Plain Black Face Cap',
-                    price: 'N 4,000',
+                    price: '₦4,000',
                     rating: 5,
                     imagePath: 'assets/images/cap.png',
                   ),
                   Product(
                     name: 'Men’s Formal Lace Up Shoes',
                     description: 'Italian Brogues Leather Shoe',
-                    price: 'N 21,000',
+                    price: '₦21,000',
                     rating: 4,
                     imagePath: 'assets/images/shoe.png',
                   ),
                   Product(
                     name: 'Men’s Short Sleeve ',
                     description: 'Casual Shirt - Black & Brown',
-                    price: 'N 25,900',
+                    price: '₦25,900',
                     rating: 5,
                     imagePath: 'assets/images/shirt.png',
                   ),
@@ -122,14 +124,14 @@ class HomePage extends StatelessWidget {
                   Product(
                     name: 'Ladies Leather Chic Bag',
                     description: 'Office Trendy Handbag...',
-                    price: 'N 20,950',
+                    price: '₦20,950',
                     rating: 4,
                     imagePath: 'assets/images/bag.png',
                   ),
                   Product(
                     name: 'Summer Tie Neck Long Dress',
                     description: 'Purple Free Floral Dress',
-                    price: 'N 10,000',
+                    price: '₦10,000',
                     rating: 5,
                     imagePath: 'assets/images/dress.png',
                   ),
@@ -150,6 +152,8 @@ class ProductSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -168,9 +172,9 @@ class ProductSection extends StatelessWidget {
                   child: Image.asset(product.imagePath, width: 185, height: 184),
                 ),
                 const SizedBox(height: 8),
-                Text(product.name, style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w600)),
+                Text(product.name, style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w600, fontSize: 12)),
                 const SizedBox(height: 4),
-                Text(product.description, style: const TextStyle(color: Colors.grey, fontFamily: 'Montserrat', fontWeight: FontWeight.w400)),
+                Text(product.description, style: const TextStyle(color: Colors.grey, fontFamily: 'Montserrat', fontWeight: FontWeight.w400, fontSize: 11)),
                 const SizedBox(height: 4),
                 Row(
                   children: List.generate(5, (index) {
@@ -188,12 +192,12 @@ class ProductSection extends StatelessWidget {
                 const SizedBox(height: 4),
                 ElevatedButton(
                   onPressed: () {
-                    CartPage.addItemToCart(product);
+                    cartProvider.addItemToCart(product);
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.black,
                     backgroundColor: Colors.white,
-                    side: const BorderSide(color: Color(0xFFFF7F7D)),
+                    side: const BorderSide(color: Color(0xFFF44336)),
                   ),
                   child: const Text('Add to Cart', style: TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w400)),
                 ),
