@@ -9,6 +9,8 @@ import 'custom_nav_bar.dart';
 import 'cart_provider.dart';
 import 'profile_page.dart';
 import 'saved_items_provider.dart';
+import 'order_history_provider.dart'; // Import OrderHistoryProvider
+import 'order_history_page.dart'; // Import OrderHistoryPage
 
 void main() {
   runApp(
@@ -16,6 +18,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => CartProvider()),
         ChangeNotifierProvider(create: (context) => SavedItemsProvider()),
+        ChangeNotifierProvider(create: (context) => OrderHistoryProvider()), // Register OrderHistoryProvider
       ],
       child: const MyApp(),
     ),
@@ -40,6 +43,7 @@ class MyApp extends StatelessWidget {
         '/payment': (context) => const PaymentPage(),
         '/payment_success': (context) => const PaymentSuccessPage(),
         '/profile': (context) => const MainPage(selectedIndex: 3),
+        '/order_history': (context) => const OrderHistoryPage(), // Register OrderHistoryPage route
       },
     );
   }

@@ -50,7 +50,7 @@ class SavedItemsPage extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    Image.asset(product.imagePath, width: 100, height: 100),
+                    Image.network(product.imagePath, width: 100, height: 100),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Column(

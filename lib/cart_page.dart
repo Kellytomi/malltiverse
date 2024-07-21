@@ -1,9 +1,8 @@
-// cart_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'products.dart';
 import 'cart_provider.dart';
-import 'package:intl/intl.dart';
+import 'main.dart'; // Import the main.dart where the MainPage is defined
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -25,17 +24,28 @@ class _CartPageState extends State<CartPage> {
     cartProvider.removeItemFromCart(product);
   }
 
-  String _formatCurrency(int amount) {
-    final formatCurrency = NumberFormat.currency(symbol: '₦', decimalDigits: 0);
-    return formatCurrency.format(amount);
+  void _navigateToCheckout() {
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => const MainPage(selectedIndex: 2), // index 2 for Checkout
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
 
-    final totalAmount = cartProvider.cartItems.entries.fold(0, (sum, entry) {
-      return sum + int.parse(entry.key.price.replaceAll(RegExp(r'[^0-9]'), '')) * entry.value;
+    final totalAmount = cartProvider.cartItems.entries.fold(0.0, (double sum, entry) {
+      final productPrice = double.parse(entry.key.price.replaceAll(RegExp(r'[^0-9.]'), ''));
+      return sum + productPrice * entry.value;
     });
 
     return Scaffold(
@@ -59,7 +69,8 @@ class _CartPageState extends State<CartPage> {
                     itemBuilder: (context, index) {
                       final product = cartProvider.cartItems.keys.elementAt(index);
                       final quantity = cartProvider.cartItems[product]!;
-                      final int productTotal = int.parse(product.price.replaceAll(RegExp(r'[^0-9]'), '')) * quantity;
+                      final productPrice = double.parse(product.price.replaceAll(RegExp(r'[^0-9.]'), ''));
+                      final double productTotal = productPrice * quantity;
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                         child: Container(
@@ -77,7 +88,7 @@ class _CartPageState extends State<CartPage> {
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
                               children: [
-                                Image.asset(product.imagePath, width: 60, height: 60, fit: BoxFit.contain),
+                                Image.network(product.imagePath, width: 60, height: 60, fit: BoxFit.contain),
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Column(
@@ -111,7 +122,7 @@ class _CartPageState extends State<CartPage> {
                                               ),
                                             ],
                                           ),
-                                          Text(_formatCurrency(productTotal), style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w600, color: Colors.black)),
+                                          Text('₦${productTotal.toStringAsFixed(2)}', style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w600, color: Colors.black)),
                                         ],
                                       ),
                                     ],
@@ -148,7 +159,7 @@ class _CartPageState extends State<CartPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text('Sub-Total', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
-                        Text(_formatCurrency(totalAmount), style: const TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
+                        Text('₦${totalAmount.toStringAsFixed(2)}', style: const TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
                       ],
                     ),
                     const SizedBox(height: 8),
@@ -173,12 +184,12 @@ class _CartPageState extends State<CartPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text('Total Amount', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat', fontWeight: FontWeight.bold)),
-                        Text(_formatCurrency(totalAmount + 1500 - 3500), style: const TextStyle(fontSize: 12, fontFamily: 'Montserrat', fontWeight: FontWeight.bold)),
+                        Text('₦${(totalAmount + 1500 - 3500).toStringAsFixed(2)}', style: const TextStyle(fontSize: 12, fontFamily: 'Montserrat', fontWeight: FontWeight.bold)),
                       ],
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: _navigateToCheckout, // Updated to navigate to Checkout page
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.black,
                         backgroundColor: const Color(0xFFFF7F7D),

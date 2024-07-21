@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'saved_items_page.dart';  // Import the SavedItemsPage
+import 'saved_items_page.dart';
+import 'order_history_page.dart'; // Import the OrderHistoryPage
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -20,16 +21,16 @@ class ProfilePage extends StatelessWidget {
                   CircleAvatar(
                     radius: 30,
                     backgroundColor: Colors.grey[300],
-                    child: Icon(
+                    child: const Icon(
                       Icons.person,
                       color: Colors.white,
                       size: 30,
                     ),
                   ),
                   const SizedBox(width: 16),
-                  Column(
+                  const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         'Welcome Etoma-etoto',
                         style: TextStyle(
@@ -62,9 +63,15 @@ class ProfilePage extends StatelessWidget {
               padding: EdgeInsets.all(16.0),
               child: Text('MY MALLTIVERSE ACCOUNT', style: TextStyle(fontSize: 14, fontFamily: 'Montserrat', fontWeight: FontWeight.w600)),
             ),
-            const ListTile(
-              leading: Icon(Icons.shopping_bag),
-              title: Text('Orders'),
+            ListTile(
+              leading: const Icon(Icons.shopping_bag),
+              title: const Text('Orders'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const OrderHistoryPage()),
+                );
+              },
             ),
             const ListTile(
               leading: Icon(Icons.inbox),

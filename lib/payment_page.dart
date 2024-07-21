@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:malltiverse/main.dart';
+import 'package:provider/provider.dart';
+import 'cart_provider.dart';
+import 'order_history_provider.dart';
 import 'custom_nav_bar.dart';
 
 class CardNumberInputFormatter extends TextInputFormatter {
@@ -291,6 +294,14 @@ class _PaymentPageState extends State<PaymentPage> {
                 height: 44,
                 child: ElevatedButton(
                   onPressed: () {
+                    // Add the current cart items to the order history
+                    final cartProvider = Provider.of<CartProvider>(context, listen: false);
+                    final orderHistoryProvider = Provider.of<OrderHistoryProvider>(context, listen: false);
+                    orderHistoryProvider.addOrder(cartProvider.cartItems.keys.toList());
+
+                    // Clear the cart
+                    cartProvider.clearCart();
+
                     Navigator.pushNamed(context, '/payment_success');
                   },
                   style: ElevatedButton.styleFrom(
@@ -323,7 +334,7 @@ class _PaymentPageState extends State<PaymentPage> {
   String _formatCardNumber(String input) {
     input = input.replaceAll(' ', '');
     String formatted = '';
-    for (int i = 0; i < input.length; i++) {
+    for (int i = 0; input.isNotEmpty && i < input.length; i++) {
       if (i % 4 == 0 && i != 0) {
         formatted += ' ';
       }

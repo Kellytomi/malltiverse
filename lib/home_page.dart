@@ -3,17 +3,35 @@ import 'package:provider/provider.dart';
 import 'products.dart';
 import 'cart_provider.dart';
 import 'saved_items_provider.dart';
+import 'api_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final List<String> imgList = [
-      'assets/images/featured_product.png',
-    ];
+  _HomePageState createState() => _HomePageState();
+}
 
+class _HomePageState extends State<HomePage> {
+  late Future<List<Product>> _futureProducts;
+  final String organizationId = '63e89fa612b54ca6be9095ad7293ba28';
+  final String appId = 'DUP9EEKYT2KF2J4';
+  final String apiKey = 'ce3f9cdf207947a09ef5fcc7e896a3f220240713120004272056';
+
+  @override
+  void initState() {
+    super.initState();
+    _futureProducts = ApiService().fetchProducts(organizationId, appId, apiKey);
+  }
+
+  String _titleCase(String text) {
+    if (text.isEmpty) return text;
+    return text.split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -27,116 +45,52 @@ class HomePage extends StatelessWidget {
                 child: Container(
                   height: 232,
                   width: double.infinity,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage(imgList[0]),
+                      image: AssetImage('assets/images/featured_product.png'),
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text('Tech Gadgets', style: TextStyle(fontSize: 20, fontFamily: 'Montserrat', fontWeight: FontWeight.w600)),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
-              child: ProductSection(
-                products: [
-                  Product(
-                    name: 'Joystick Game Controller',
-                    description: 'Wired UCOM USB Pad...',
-                    price: '₦11,250',
-                    rating: 5,
-                    imagePath: 'assets/images/joystick.png',
-                  ),
-                  Product(
-                    name: 'Apple iPhone 14 Pro',
-                    description: '6GB RAM + 128GB ROM',
-                    price: '₦1,450,000',
-                    rating: 5,
-                    imagePath: 'assets/images/iphone.png',
-                  ),
-                  Product(
-                    name: 'Touch Screen Smart Watch',
-                    description: 'For Android & IOS',
-                    price: '₦9,170',
-                    rating: 5,
-                    imagePath: 'assets/images/watch.png',
-                  ),
-                  Product(
-                    name: 'Itel Bluetooth Earphones',
-                    description: 'BUDS ACE Wireless Earpods',
-                    price: '₦17,660',
-                    rating: 4,
-                    imagePath: 'assets/images/earbuds.png',
-                  ),
-                ],
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text('Men\'s Fashion', style: TextStyle(fontSize: 20, fontFamily: 'Montserrat', fontWeight: FontWeight.w600)),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
-              child: ProductSection(
-                products: [
-                  Product(
-                    name: 'Men\'s Belt Leather',
-                    description: 'Buckle Brown Timeless Belt',
-                    price: '₦17,500',
-                    rating: 4,
-                    imagePath: 'assets/images/belt.png',
-                  ),
-                  Product(
-                    name: 'Quality Plain Face Cap',
-                    description: 'Plain Black Face Cap',
-                    price: '₦4,000',
-                    rating: 5,
-                    imagePath: 'assets/images/cap.png',
-                  ),
-                  Product(
-                    name: 'Men’s Formal Lace Up Shoes',
-                    description: 'Italian Brogues Leather Shoe',
-                    price: '₦21,000',
-                    rating: 4,
-                    imagePath: 'assets/images/shoe.png',
-                  ),
-                  Product(
-                    name: 'Men’s Short Sleeve ',
-                    description: 'Casual Shirt - Black & Brown',
-                    price: '₦25,900',
-                    rating: 5,
-                    imagePath: 'assets/images/shirt.png',
-                  ),
-                ],
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text('Women\'s Fashion', style: TextStyle(fontSize: 20, fontFamily: 'Montserrat', fontWeight: FontWeight.w600)),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
-              child: ProductSection(
-                products: [
-                  Product(
-                    name: 'Ladies Leather Chic Bag',
-                    description: 'Office Trendy Handbag...',
-                    price: '₦20,950',
-                    rating: 4,
-                    imagePath: 'assets/images/bag.png',
-                  ),
-                  Product(
-                    name: 'Summer Tie Neck Long Dress',
-                    description: 'Purple Free Floral Dress',
-                    price: '₦10,000',
-                    rating: 5,
-                    imagePath: 'assets/images/dress.png',
-                  ),
-                ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: FutureBuilder<List<Product>>(
+                future: _futureProducts,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(child: Text('No products available'));
+                  } else {
+                    final productsByCategory = <String, List<Product>>{};
+                    for (var product in snapshot.data!) {
+                      final category = _titleCase(product.category);
+                      if (!productsByCategory.containsKey(category)) {
+                        productsByCategory[category] = [];
+                      }
+                      productsByCategory[category]!.add(product);
+                    }
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: productsByCategory.entries.map((entry) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text(entry.key, style: const TextStyle(fontSize: 20, fontFamily: 'Montserrat', fontWeight: FontWeight.w600)),
+                            ),
+                            ProductSection(products: entry.value),
+                          ],
+                        );
+                      }).toList(),
+                    );
+                  }
+                },
               ),
             ),
           ],
@@ -172,7 +126,9 @@ class ProductSection extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                   padding: const EdgeInsets.all(8.0),
-                  child: Image.asset(product.imagePath, width: 185, height: 184),
+                  child: product.imagePath.startsWith('http')
+                      ? Image.network(product.imagePath, width: 185, height: 184)
+                      : Image.asset(product.imagePath, width: 185, height: 184),  // Use asset image if imagePath is local
                 ),
                 const SizedBox(height: 8),
                 Text(product.name, style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w600, fontSize: 12)),
