@@ -63,6 +63,7 @@ flutter:
     - assets/icons/home.png
     - assets/icons/cart1.png
     - assets/icons/checkout1.png
+    - assets/icons/profile.png
     - assets/icons/Malltiverse.png
     - assets/images/joystick.png
     - assets/images/iphone.png

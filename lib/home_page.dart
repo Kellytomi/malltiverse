@@ -1,8 +1,8 @@
-// home_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'product.dart';
+import 'products.dart';  // Ensure the correct import path for products.dart
 import 'cart_provider.dart';
+import 'saved_items_provider.dart';  // Import the SavedItemsProvider
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -153,11 +153,13 @@ class ProductSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
+    final savedItemsProvider = Provider.of<SavedItemsProvider>(context);
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
         children: products.map((product) {
+          final isSaved = savedItemsProvider.isSaved(product);
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Column(
@@ -190,16 +192,34 @@ class ProductSection extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(product.price, style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w400, color: Colors.red)),
                 const SizedBox(height: 4),
-                ElevatedButton(
-                  onPressed: () {
-                    cartProvider.addItemToCart(product);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.black,
-                    backgroundColor: Colors.white,
-                    side: const BorderSide(color: Color(0xFFFF7F7D)),
-                  ),
-                  child: const Text('Add to Cart', style: TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w400)),
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        cartProvider.addItemToCart(product);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.black,
+                        backgroundColor: Colors.white,
+                        side: const BorderSide(color: Color(0xFFFF7F7D)),
+                      ),
+                      child: const Text('Add to Cart', style: TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w400)),
+                    ),
+                    const SizedBox(width: 8),
+                    IconButton(
+                      icon: Icon(
+                        isSaved ? Icons.favorite : Icons.favorite_border,
+                        color: isSaved ? Colors.red : Colors.black,
+                      ),
+                      onPressed: () {
+                        if (isSaved) {
+                          savedItemsProvider.removeItemFromSaved(product);
+                        } else {
+                          savedItemsProvider.addItemToSaved(product);
+                        }
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),

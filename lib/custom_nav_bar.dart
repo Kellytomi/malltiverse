@@ -34,15 +34,16 @@ class CustomNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavBarItem(0, 'assets/icons/home.png'),
-          _buildNavBarItem(1, 'assets/icons/cart1.png', showCounter: true),
-          _buildNavBarItem(2, 'assets/icons/checkout1.png'),
+          _buildNavBarItem(context, 0, 'assets/icons/home.png'),
+          _buildNavBarItem(context, 1, 'assets/icons/cart1.png', showCounter: true),
+          _buildNavBarItem(context, 2, 'assets/icons/checkout1.png'),
+          _buildNavBarItem(context, 3, 'assets/icons/profile.png'),  // Update index for profile icon
         ],
       ),
     );
   }
 
-  Widget _buildNavBarItem(int index, String assetPath, {bool showCounter = false}) {
+  Widget _buildNavBarItem(BuildContext context, int index, String assetPath, {bool showCounter = false}) {
     return GestureDetector(
       onTap: () => onItemTapped(index),
       child: Stack(

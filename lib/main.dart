@@ -1,4 +1,3 @@
-// main.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'home_page.dart';
@@ -8,11 +7,16 @@ import 'payment_page.dart';
 import 'payment_success_page.dart';
 import 'custom_nav_bar.dart';
 import 'cart_provider.dart';
+import 'profile_page.dart';
+import 'saved_items_provider.dart';  // Import the SavedItemsProvider
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => CartProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => CartProvider()),
+        ChangeNotifierProvider(create: (context) => SavedItemsProvider()),  // Provide the SavedItemsProvider
+      ],
       child: const MyApp(),
     ),
   );
@@ -35,6 +39,7 @@ class MyApp extends StatelessWidget {
         '/checkout': (context) => const MainPage(selectedIndex: 2),
         '/payment': (context) => const PaymentPage(),
         '/payment_success': (context) => const PaymentSuccessPage(),
+        '/profile': (context) => const MainPage(selectedIndex: 3),  // Add profile route
       },
     );
   }
@@ -57,6 +62,7 @@ class _MainPageState extends State<MainPage> {
     const HomePage(),
     const CartPage(),
     const CheckoutPage(),
+    const ProfilePage(), // Add ProfilePage to the pages list
   ];
 
   @override
@@ -94,7 +100,9 @@ class _MainPageState extends State<MainPage> {
         title: Text(
           _selectedIndex == 0
               ? 'Product List'
-              : (_selectedIndex == 1 ? 'My Cart' : 'Checkout'),
+              : (_selectedIndex == 1
+                  ? 'My Cart'
+                  : (_selectedIndex == 2 ? 'Checkout' : 'Profile')),
           style: const TextStyle(
             color: Colors.black,
             fontSize: 20,
