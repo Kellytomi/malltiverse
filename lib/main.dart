@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'home_page.dart';
-import 'cart_page.dart';
-import 'checkout_page.dart';
-import 'payment_page.dart';
-import 'payment_success_page.dart';
-import 'custom_nav_bar.dart';
-import 'cart_provider.dart';
-import 'profile_page.dart';
-import 'saved_items_provider.dart';
-import 'order_history_provider.dart'; // Import OrderHistoryProvider
-import 'order_history_page.dart'; // Import OrderHistoryPage
+import 'presentation/pages/home_page.dart';
+import 'presentation/pages/cart_page.dart';
+import 'presentation/pages/checkout_page.dart';
+import 'presentation/pages/payment_page.dart';
+import 'presentation/pages/payment_success_page.dart';
+import 'presentation/widgets/custom_nav_bar.dart';
+import 'data/providers/cart_provider.dart';
+import 'presentation/pages/profile_page.dart';
+import 'data/providers/saved_items_provider.dart';
+import 'data/providers/order_history_provider.dart';
+import 'core/connectivity_provider.dart';
+import 'core/connectivity_listener.dart';
 
 void main() {
   runApp(
@@ -18,7 +19,8 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => CartProvider()),
         ChangeNotifierProvider(create: (context) => SavedItemsProvider()),
-        ChangeNotifierProvider(create: (context) => OrderHistoryProvider()), // Register OrderHistoryProvider
+        ChangeNotifierProvider(create: (context) => ConnectivityProvider()),
+        ChangeNotifierProvider(create: (context) => OrderHistoryProvider()),
       ],
       child: const MyApp(),
     ),
@@ -27,6 +29,17 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const ConnectivityListener(
+      child: MainApp(),
+    );
+  }
+}
+
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +56,6 @@ class MyApp extends StatelessWidget {
         '/payment': (context) => const PaymentPage(),
         '/payment_success': (context) => const PaymentSuccessPage(),
         '/profile': (context) => const MainPage(selectedIndex: 3),
-        '/order_history': (context) => const OrderHistoryPage(), // Register OrderHistoryPage route
       },
     );
   }
@@ -52,7 +64,7 @@ class MyApp extends StatelessWidget {
 class MainPage extends StatefulWidget {
   final int selectedIndex;
 
-  const MainPage({Key? key, required this.selectedIndex}) : super(key: key);
+  const MainPage({super.key, required this.selectedIndex});
 
   @override
   _MainPageState createState() => _MainPageState();

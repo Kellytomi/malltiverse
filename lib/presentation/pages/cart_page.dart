@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'products.dart';
-import 'cart_provider.dart';
-import 'main.dart'; // Import the main.dart where the MainPage is defined
+import '../../data/models/products.dart';
+import '../../data/providers/cart_provider.dart';
+import '../../main.dart'; // Import the main.dart where the MainPage is defined
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});

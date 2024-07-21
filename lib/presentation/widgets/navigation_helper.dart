@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:malltiverse/payment_page.dart';
+import 'package:malltiverse/presentation/pages/payment_page.dart';
 
 void navigateToPayment(BuildContext context) {
   Navigator.of(context).push(PageRouteBuilder(

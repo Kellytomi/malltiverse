@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'products.dart';
+import '../models/products.dart';
 
 class ApiService {
   final String _baseUrl = 'https://api.timbu.cloud/products';

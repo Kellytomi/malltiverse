@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'saved_items_provider.dart';
-import 'cart_provider.dart';
-import 'products.dart';
+import '../../data/providers/saved_items_provider.dart';
+import '../../data/providers/cart_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class SavedItemsPage extends StatelessWidget {

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'products.dart';
-import 'cart_provider.dart';
-import 'saved_items_provider.dart';
-import 'api_service.dart';
+import '../../data/models/products.dart';
+import '../../data/providers/cart_provider.dart';
+import '../../data/providers/saved_items_provider.dart';
+import '../../data/services/api_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../../core/connectivity_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,7 +23,37 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _futureProducts = ApiService().fetchProducts(organizationId, appId, apiKey);
+    _fetchProducts();
+  }
+
+  void _fetchProducts() {
+    if (Provider.of<ConnectivityProvider>(context, listen: false).isOnline) {
+      setState(() {
+        _futureProducts = ApiService().fetchProducts(organizationId, appId, apiKey);
+      });
+    } else {
+      Fluttertoast.showToast(
+        msg: "No internet connection. Please check your settings.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+      );
+    }
+  }
+
+  Future<void> _refreshProducts() async {
+    if (Provider.of<ConnectivityProvider>(context, listen: false).isOnline) {
+      _fetchProducts();
+    } else {
+      Fluttertoast.showToast(
+        msg: "No internet connection. Please check your settings.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+      );
+    }
   }
 
   String _titleCase(String text) {
@@ -34,66 +65,70 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12.0),
-                child: Container(
-                  height: 232,
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/featured_product.png'),
-                      fit: BoxFit.cover,
+      body: RefreshIndicator(
+        onRefresh: _refreshProducts,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+                  child: Container(
+                    height: 232,
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/featured_product.png'),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: FutureBuilder<List<Product>>(
-                future: _futureProducts,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(child: Text('No products available'));
-                  } else {
-                    final productsByCategory = <String, List<Product>>{};
-                    for (var product in snapshot.data!) {
-                      final category = _titleCase(product.category);
-                      if (!productsByCategory.containsKey(category)) {
-                        productsByCategory[category] = [];
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: FutureBuilder<List<Product>>(
+                  future: _futureProducts,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(child: Text('No products available'));
+                    } else {
+                      final productsByCategory = <String, List<Product>>{};
+                      for (var product in snapshot.data!) {
+                        final category = _titleCase(product.category);
+                        if (!productsByCategory.containsKey(category)) {
+                          productsByCategory[category] = [];
+                        }
+                        productsByCategory[category]!.add(product);
                       }
-                      productsByCategory[category]!.add(product);
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: productsByCategory.entries.map((entry) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(entry.key, style: const TextStyle(fontSize: 20, fontFamily: 'Montserrat', fontWeight: FontWeight.w600)),
+                              ),
+                              ProductSection(products: entry.value),
+                            ],
+                          );
+                        }).toList(),
+                      );
                     }
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: productsByCategory.entries.map((entry) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text(entry.key, style: const TextStyle(fontSize: 20, fontFamily: 'Montserrat', fontWeight: FontWeight.w600)),
-                            ),
-                            ProductSection(products: entry.value),
-                          ],
-                        );
-                      }).toList(),
-                    );
-                  }
-                },
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'products.dart';  // Ensure this import path is correct
+import '../models/products.dart';  // Ensure this import path is correct
 
 class SavedItemsProvider with ChangeNotifier {
   final List<Product> _savedItems = [];

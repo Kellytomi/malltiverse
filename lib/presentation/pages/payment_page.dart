@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:malltiverse/main.dart';
 import 'package:provider/provider.dart';
-import 'cart_provider.dart';
-import 'order_history_provider.dart';
-import 'custom_nav_bar.dart';
+import '../../data/providers/cart_provider.dart';
+import '../../data/providers/order_history_provider.dart';
+import '../widgets/custom_nav_bar.dart';
 
 class CardNumberInputFormatter extends TextInputFormatter {
   @override
