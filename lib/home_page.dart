@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'products.dart';  // Ensure the correct import path for products.dart
+import 'products.dart';
 import 'cart_provider.dart';
-import 'saved_items_provider.dart';  // Import the SavedItemsProvider
+import 'saved_items_provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -14,7 +15,7 @@ class HomePage extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: Colors.white, // Set the background color of the Scaffold to white
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,6 +198,13 @@ class ProductSection extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         cartProvider.addItemToCart(product);
+                        Fluttertoast.showToast(
+                          msg: "Cart Successfully Updated",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.TOP,
+                          backgroundColor: Colors.black,
+                          textColor: Colors.white,
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.black,
@@ -214,8 +222,22 @@ class ProductSection extends StatelessWidget {
                       onPressed: () {
                         if (isSaved) {
                           savedItemsProvider.removeItemFromSaved(product);
+                          Fluttertoast.showToast(
+                            msg: "Removed from wishlist",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.TOP,
+                            backgroundColor: Colors.black,
+                            textColor: Colors.white,
+                          );
                         } else {
                           savedItemsProvider.addItemToSaved(product);
+                          Fluttertoast.showToast(
+                            msg: "Added to wishlist",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.TOP,
+                            backgroundColor: Colors.black,
+                            textColor: Colors.white,
+                          );
                         }
                       },
                     ),

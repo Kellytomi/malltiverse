@@ -8,14 +8,14 @@ import 'payment_success_page.dart';
 import 'custom_nav_bar.dart';
 import 'cart_provider.dart';
 import 'profile_page.dart';
-import 'saved_items_provider.dart';  // Import the SavedItemsProvider
+import 'saved_items_provider.dart';
 
 void main() {
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => CartProvider()),
-        ChangeNotifierProvider(create: (context) => SavedItemsProvider()),  // Provide the SavedItemsProvider
+        ChangeNotifierProvider(create: (context) => SavedItemsProvider()),
       ],
       child: const MyApp(),
     ),
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         '/checkout': (context) => const MainPage(selectedIndex: 2),
         '/payment': (context) => const PaymentPage(),
         '/payment_success': (context) => const PaymentSuccessPage(),
-        '/profile': (context) => const MainPage(selectedIndex: 3),  // Add profile route
+        '/profile': (context) => const MainPage(selectedIndex: 3),
       },
     );
   }
@@ -62,7 +62,7 @@ class _MainPageState extends State<MainPage> {
     const HomePage(),
     const CartPage(),
     const CheckoutPage(),
-    const ProfilePage(), // Add ProfilePage to the pages list
+    const ProfilePage(),
   ];
 
   @override

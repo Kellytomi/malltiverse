@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'saved_items_provider.dart';
 import 'cart_provider.dart';
 import 'products.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SavedItemsPage extends StatelessWidget {
   const SavedItemsPage({super.key});
@@ -28,7 +29,7 @@ class SavedItemsPage extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      backgroundColor: Colors.white, // Set the background color to white
+      backgroundColor: Colors.white,
       body: ListView.builder(
         itemCount: savedItems.length,
         itemBuilder: (context, index) {
@@ -78,6 +79,13 @@ class SavedItemsPage extends StatelessWidget {
                               ElevatedButton(
                                 onPressed: () {
                                   cartProvider.addItemToCart(product);
+                                  Fluttertoast.showToast(
+                                    msg: "Product added to your cart",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white,
+                                  );
                                 },
                                 style: ElevatedButton.styleFrom(
                                   foregroundColor: Colors.black,
@@ -90,6 +98,13 @@ class SavedItemsPage extends StatelessWidget {
                               TextButton(
                                 onPressed: () {
                                   savedItemsProvider.removeItemFromSaved(product);
+                                  Fluttertoast.showToast(
+                                    msg: "Product removed from your wishlist",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white,
+                                  );
                                 },
                                 child: const Text('Remove', style: TextStyle(color: Color(0xFFFF7F7D))),
                               ),
