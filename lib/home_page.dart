@@ -197,7 +197,7 @@ class ProductSection extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.black,
                     backgroundColor: Colors.white,
-                    side: const BorderSide(color: Color(0xFFF44336)),
+                    side: const BorderSide(color: Color(0xFFFF7F7D)),
                   ),
                   child: const Text('Add to Cart', style: TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w400)),
                 ),
