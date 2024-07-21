@@ -1,3 +1,4 @@
+// main.dart
 import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'cart_page.dart';
@@ -67,6 +68,8 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    int cartItemCount = CartPage.cartItems.values.fold(0, (sum, item) => sum + item);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -108,6 +111,7 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: CustomNavBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
+        cartItemCount: cartItemCount,
       ),
     );
   }

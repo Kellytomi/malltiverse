@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:badges/badges.dart' as badges;
 
 class CustomNavBar extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onItemTapped;
+  final int cartItemCount;
 
   const CustomNavBar({
-    Key? key,
+    super.key,
     required this.selectedIndex,
     required this.onItemTapped,
-  }) : super(key: key);
+    this.cartItemCount = 0,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,22 +35,38 @@ class CustomNavBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildNavBarItem(0, 'assets/icons/home.png'),
-          _buildNavBarItem(1, 'assets/icons/cart1.png'),
+          _buildNavBarItem(1, 'assets/icons/cart1.png', showCounter: true),
           _buildNavBarItem(2, 'assets/icons/checkout1.png'),
         ],
       ),
     );
   }
 
-  Widget _buildNavBarItem(int index, String assetPath) {
+  Widget _buildNavBarItem(int index, String assetPath, {bool showCounter = false}) {
     return GestureDetector(
       onTap: () => onItemTapped(index),
-      child: CircleAvatar(
-        backgroundColor: selectedIndex == index ? const Color(0xFFFF7F7D) : Colors.transparent,
-        child: Image.asset(
-          assetPath,
-          color: selectedIndex == index ? Colors.black : Colors.white,
-        ),
+      child: Stack(
+        children: [
+          CircleAvatar(
+            backgroundColor: selectedIndex == index ? const Color(0xFFFF7F7D) : Colors.transparent,
+            child: Image.asset(
+              assetPath,
+              color: selectedIndex == index ? Colors.black : Colors.white,
+            ),
+          ),
+          if (showCounter && cartItemCount > 0)
+            Positioned(
+              right: 0,
+              child: badges.Badge(
+                badgeContent: Text(
+                  '$cartItemCount',
+                  style: const TextStyle(color: Colors.white, fontSize: 10),
+                ),
+                child: Container(),
+                badgeColor: Colors.red,
+              ),
+            ),
+        ],
       ),
     );
   }

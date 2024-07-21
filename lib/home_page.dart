@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'product.dart';
+import 'cart_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -185,11 +187,13 @@ class ProductSection extends StatelessWidget {
                 Text(product.price, style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w400, color: Colors.red)),
                 const SizedBox(height: 4),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    CartPage.addItemToCart(product);
+                  },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.black,
                     backgroundColor: Colors.white,
-                    side: const BorderSide(color: Color(0xFFF44336)),
+                    side: const BorderSide(color: Color(0xFFFF7F7D)),
                   ),
                   child: const Text('Add to Cart', style: TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w400)),
                 ),
@@ -200,20 +204,4 @@ class ProductSection extends StatelessWidget {
       ),
     );
   }
-}
-
-class Product {
-  final String name;
-  final String description;
-  final String price;
-  final int rating;
-  final String imagePath;
-
-  const Product({
-    required this.name,
-    required this.description,
-    required this.price,
-    required this.rating,
-    required this.imagePath,
-  });
 }
