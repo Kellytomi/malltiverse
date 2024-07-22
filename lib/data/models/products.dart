@@ -27,7 +27,7 @@ class Product {
     return Product(
       name: json['name'] ?? '',
       description: json['description'] ?? '',
-      price: 'N${json['current_price'][0]['NGN'][0]}',
+      price: '₦${json['current_price'][0]['NGN'][0]}',
       rating: json['rating'] ?? 0,
       category: json['categories'][0]['name'] ?? 'Unknown',
       imagePath: imagePath.isEmpty ? 'assets/images/default_product_image.png' : imagePath,  // Use a default image if imagePath is empty

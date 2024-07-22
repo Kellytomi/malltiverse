@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import '../../data/models/products.dart';
 import '../../data/providers/cart_provider.dart';
 import '../../data/providers/saved_items_provider.dart';
@@ -150,6 +151,9 @@ class ProductSection extends StatelessWidget {
       child: Row(
         children: products.map((product) {
           final isSaved = savedItemsProvider.isSaved(product);
+          final formatter = NumberFormat("#,##0.00", "en_US");
+          final formattedPrice = '₦ ${formatter.format(double.tryParse(product.price.replaceAll('₦', '').replaceAll(',', '')) ?? 0)}';
+
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Column(
@@ -182,7 +186,7 @@ class ProductSection extends StatelessWidget {
                   }),
                 ),
                 const SizedBox(height: 4),
-                Text(product.price, style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w400, color: Colors.red)),
+                Text(formattedPrice, style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w400, color: Colors.red)),
                 const SizedBox(height: 4),
                 Row(
                   children: [

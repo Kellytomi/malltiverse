@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import '../../data/models/products.dart';
 import '../../data/providers/cart_provider.dart';
 import '../../main.dart'; // Import the main.dart where the MainPage is defined
@@ -48,6 +49,15 @@ class _CartPageState extends State<CartPage> {
       return sum + productPrice * entry.value;
     });
 
+    final formatter = NumberFormat("#,##0.00", "en_US");
+    final formattedTotalAmount = formatter.format(totalAmount);
+    final deliveryFee = 1500.0;
+    final discountAmount = 3500.0;
+    final formattedDeliveryFee = formatter.format(deliveryFee);
+    final formattedDiscountAmount = formatter.format(discountAmount);
+    final totalPayable = totalAmount + deliveryFee - discountAmount;
+    final formattedTotalPayable = formatter.format(totalPayable);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -71,6 +81,7 @@ class _CartPageState extends State<CartPage> {
                       final quantity = cartProvider.cartItems[product]!;
                       final productPrice = double.parse(product.price.replaceAll(RegExp(r'[^0-9.]'), ''));
                       final double productTotal = productPrice * quantity;
+                      final formattedProductTotal = formatter.format(productTotal);
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                         child: Container(
@@ -122,7 +133,7 @@ class _CartPageState extends State<CartPage> {
                                               ),
                                             ],
                                           ),
-                                          Text('₦${productTotal.toStringAsFixed(2)}', style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w600, color: Colors.black)),
+                                          Text('₦$formattedProductTotal', style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w600, color: Colors.black)),
                                         ],
                                       ),
                                     ],
@@ -159,23 +170,23 @@ class _CartPageState extends State<CartPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text('Sub-Total', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
-                        Text('₦${totalAmount.toStringAsFixed(2)}', style: const TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
+                        Text('₦$formattedTotalAmount', style: const TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
                       ],
                     ),
                     const SizedBox(height: 8),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Delivery Fee', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
-                        Text('₦1,500', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
+                        const Text('Delivery Fee', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
+                        Text('₦$formattedDeliveryFee', style: const TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
                       ],
                     ),
                     const SizedBox(height: 8),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Discount Amount', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
-                        Text('₦3,500', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
+                        const Text('Discount Amount', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
+                        Text('₦$formattedDiscountAmount', style: const TextStyle(fontSize: 12, fontFamily: 'Montserrat')),
                       ],
                     ),
                     const SizedBox(height: 8),
@@ -184,7 +195,7 @@ class _CartPageState extends State<CartPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text('Total Amount', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat', fontWeight: FontWeight.bold)),
-                        Text('₦${(totalAmount + 1500 - 3500).toStringAsFixed(2)}', style: const TextStyle(fontSize: 12, fontFamily: 'Montserrat', fontWeight: FontWeight.bold)),
+                        Text('₦$formattedTotalPayable', style: const TextStyle(fontSize: 12, fontFamily: 'Montserrat', fontWeight: FontWeight.bold)),
                       ],
                     ),
                     const SizedBox(height: 16),

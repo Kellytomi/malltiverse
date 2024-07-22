@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import '../../data/providers/order_history_provider.dart';
 
 class OrderHistoryPage extends StatelessWidget {
@@ -8,6 +9,7 @@ class OrderHistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final orderHistoryProvider = Provider.of<OrderHistoryProvider>(context);
+    final formatter = NumberFormat("#,##0.00", "en_US");
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -30,6 +32,8 @@ class OrderHistoryPage extends StatelessWidget {
         itemCount: orderHistoryProvider.orders.length,
         itemBuilder: (context, index) {
           final product = orderHistoryProvider.orders[index];
+          final formattedPrice = '₦ ${formatter.format(double.tryParse(product.price.replaceAll('₦', '').replaceAll(',', '')) ?? 0)}';
+
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Container(
@@ -59,7 +63,7 @@ class OrderHistoryPage extends StatelessWidget {
                           const SizedBox(height: 4),
                           const Text('Delivered', style: TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w400, color: Colors.green)),
                           const SizedBox(height: 4),
-                          Text(product.price, style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w600, color: Colors.black)),
+                          Text(formattedPrice, style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w600, color: Colors.black)),
                         ],
                       ),
                     ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import '../../data/providers/saved_items_provider.dart';
 import '../../data/providers/cart_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,6 +13,8 @@ class SavedItemsPage extends StatelessWidget {
     final savedItemsProvider = Provider.of<SavedItemsProvider>(context);
     final cartProvider = Provider.of<CartProvider>(context);
     final savedItems = savedItemsProvider.savedItems;
+
+    final formatter = NumberFormat("#,##0.00", "en_US");
 
     return Scaffold(
       appBar: AppBar(
@@ -33,6 +36,8 @@ class SavedItemsPage extends StatelessWidget {
         itemCount: savedItems.length,
         itemBuilder: (context, index) {
           final product = savedItems[index];
+          final formattedPrice = '₦ ${formatter.format(double.tryParse(product.price.replaceAll('₦', '').replaceAll(',', '')) ?? 0)}';
+
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Container(
@@ -71,7 +76,7 @@ class SavedItemsPage extends StatelessWidget {
                             }),
                           ),
                           const SizedBox(height: 4),
-                          Text(product.price, style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w400, color: Colors.red)),
+                          Text(formattedPrice, style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w400, color: Colors.red)),
                           const SizedBox(height: 4),
                           Row(
                             children: [
