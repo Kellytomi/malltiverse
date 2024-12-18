@@ -83,27 +83,27 @@ class _CheckoutPageState extends State<CheckoutPage> {
           ),
           const SizedBox(height: 8),
           SizedBox(
-            width: 248,
+            width: 400,
             height: 38.83,
             child: TextFormField(
               decoration: const InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 ),
-                hintText: 'Phone nos 1',
+                hintText: 'Phone Number 1',
               ),
             ),
           ),
           const SizedBox(height: 16),
           SizedBox(
-            width: 248,
+            width: 400,
             height: 38.83,
             child: TextFormField(
               decoration: const InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 ),
-                hintText: 'Phone nos 2',
+                hintText: 'Alternative Phone Number',
               ),
             ),
           ),

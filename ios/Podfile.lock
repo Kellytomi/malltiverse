@@ -30,7 +30,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  fluttertoast: 9f2f8e81bb5ce18facb9748d7855bf5a756fe3db
+  fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
   ReachabilitySwift: 7f151ff156cea1481a8411701195ac6a984f4979
   Toast: 1f5ea13423a1e6674c4abdac5be53587ae481c4e
 
