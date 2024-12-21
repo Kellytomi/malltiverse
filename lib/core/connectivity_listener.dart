@@ -6,7 +6,7 @@ import 'error_widget_custom.dart';
 class ConnectivityListener extends StatelessWidget {
   final Widget child;
 
-  const ConnectivityListener({Key? key, required this.child}) : super(key: key);
+  const ConnectivityListener({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

@@ -51,8 +51,8 @@ class _CartPageState extends State<CartPage> {
 
     final formatter = NumberFormat("#,##0.00", "en_US");
     final formattedTotalAmount = formatter.format(totalAmount);
-    final deliveryFee = 1500.0;
-    final discountAmount = 3500.0;
+    const deliveryFee = 1500.0;
+    const discountAmount = 3500.0;
     final formattedDeliveryFee = formatter.format(deliveryFee);
     final formattedDiscountAmount = formatter.format(discountAmount);
     final totalPayable = totalAmount + deliveryFee - discountAmount;
@@ -147,7 +147,7 @@ class _CartPageState extends State<CartPage> {
                     },
                   ),
           ),
-          if (!cartProvider.cartItems.isEmpty)
+          if (cartProvider.cartItems.isNotEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Container(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'payment_page.dart';
+import 'package:flutter/services.dart';
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage({super.key});
@@ -11,10 +12,20 @@ class CheckoutPage extends StatefulWidget {
 class _CheckoutPageState extends State<CheckoutPage> {
   int _selectedPickupIndex = 1;
 
+  final TextEditingController _phone1Controller = TextEditingController();
+  final TextEditingController _phone2Controller = TextEditingController();
+
   void _onPickupOptionChanged(int? value) {
     setState(() {
       _selectedPickupIndex = value!;
     });
+  }
+
+  @override
+  void dispose() {
+    _phone1Controller.dispose();
+    _phone2Controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -86,6 +97,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             width: 400,
             height: 38.83,
             child: TextFormField(
+              controller: _phone1Controller,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -99,6 +111,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             width: 400,
             height: 38.83,
             child: TextFormField(
+              controller: _phone2Controller,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
